@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package kantinkampusapp.view;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -69,8 +70,18 @@ public class KasirView extends javax.swing.JFrame {
         });
 
         btnSimpan.setText("SIMPAN");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanActionPerformed(evt);
+            }
+        });
 
         btnHapus.setText("HAPUS");
+        btnHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHapusActionPerformed(evt);
+            }
+        });
 
         btnTambah.setText("TAMBAH");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
@@ -81,10 +92,7 @@ public class KasirView extends javax.swing.JFrame {
 
         tblKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Menu", "Harga", "Jumlah", "Subtotal"
@@ -196,13 +204,167 @@ int subtotal = harga * jumlah;
 javax.swing.table.DefaultTableModel model =
 (javax.swing.table.DefaultTableModel) tblKasir.getModel();
 
+if(jumlah > stok){
+    JOptionPane.showMessageDialog(null,
+        "Stok tidak cukup");
+    return;
+}
 model.addRow(new Object[]{
     menu,
     harga,
     jumlah,
     subtotal
 });
+int total = 0;
+
+for (int i = 0; i < tblKasir.getRowCount(); i++) {
+    total += Integer.parseInt(tblKasir.getValueAt(i, 3).toString());
+}
+
+lblTotal.setText("Total Bayar : Rp " + total);
     }//GEN-LAST:event_btnTambahActionPerformed
+
+    private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
+        // TODO add your handling code here:
+        int baris = tblKasir.getSelectedRow();
+
+if (baris >= 0) {
+
+    javax.swing.table.DefaultTableModel model =
+    (javax.swing.table.DefaultTableModel) tblKasir.getModel();
+
+    model.removeRow(baris);
+
+    // hitung ulang total
+    int total = 0;
+
+    for (int i = 0; i < tblKasir.getRowCount(); i++) {
+        total += Integer.parseInt(
+            tblKasir.getValueAt(i, 3).toString()
+        );
+    }
+
+    lblTotal.setText("Total Bayar : Rp " + total);
+
+}
+    }//GEN-LAST:event_btnHapusActionPerformed
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        // TODO add your handling code here:
+        try {
+
+    java.sql.Connection conn =
+        kantinkampusapp.database.Koneksi.getKoneksi();
+
+    // =========================
+    // HITUNG TOTAL
+    // =========================
+    int total = 0;
+
+    javax.swing.table.DefaultTableModel model =
+        (javax.swing.table.DefaultTableModel) tblKasir.getModel();
+
+    for (int i = 0; i < model.getRowCount(); i++) {
+
+        total += Integer.parseInt(
+            model.getValueAt(i, 3).toString()
+        );
+
+    }
+
+    // =========================
+    // SIMPAN KE TRANSAKSI
+    // =========================
+    String sqlTransaksi =
+        "INSERT INTO transaksi(tanggal,total) VALUES (NOW(),?)";
+
+    java.sql.PreparedStatement pstTransaksi =
+        conn.prepareStatement(
+            sqlTransaksi,
+            java.sql.Statement.RETURN_GENERATED_KEYS
+        );
+
+    pstTransaksi.setInt(1, total);
+
+    pstTransaksi.executeUpdate();
+
+    // =========================
+    // AMBIL ID TRANSAKSI
+    // =========================
+    java.sql.ResultSet rs =
+        pstTransaksi.getGeneratedKeys();
+
+    int idTransaksi = 0;
+
+    if(rs.next()) {
+        idTransaksi = rs.getInt(1);
+    }
+
+    // =========================
+    // SIMPAN DETAIL TRANSAKSI
+    // =========================
+    for (int i = 0; i < model.getRowCount(); i++) {
+
+        String menu =
+            model.getValueAt(i, 0).toString();
+
+        String harga =
+            model.getValueAt(i, 1).toString();
+
+        String jumlah =
+            model.getValueAt(i, 2).toString();
+
+        String subtotal =
+            model.getValueAt(i, 3).toString();
+
+        String sqlDetail =
+            "INSERT INTO detail_transaksi(id_transaksi,menu,harga,jumlah,subtotal) VALUES (?,?,?,?,?)";
+
+        java.sql.PreparedStatement pstDetail =
+            conn.prepareStatement(sqlDetail);
+
+        pstDetail.setInt(1, idTransaksi);
+        pstDetail.setString(2, menu);
+        pstDetail.setString(3, harga);
+        pstDetail.setString(4, jumlah);
+        pstDetail.setString(5, subtotal);
+
+        pstDetail.executeUpdate();
+        // =====================
+// UPDATE STOK
+// =====================
+
+String sqlStok =
+    "UPDATE menu SET stok = stok - ? WHERE nama_menu = ?";
+
+java.sql.PreparedStatement pstStok =
+    conn.prepareStatement(sqlStok);
+
+pstStok.setString(1, jumlah);
+pstStok.setString(2, menu);
+
+pstStok.executeUpdate();
+
+    }
+
+    JOptionPane.showMessageDialog(
+        null,
+        "Transaksi berhasil disimpan"
+    );
+model.setRowCount(0);
+
+lblTotal.setText("Total Bayar : Rp 0");
+
+txtJumlah.setText("");
+} catch (Exception e) {
+
+    JOptionPane.showMessageDialog(
+        null,
+        e.getMessage()
+    );
+
+}
+    }//GEN-LAST:event_btnSimpanActionPerformed
 
     /**
      * @param args the command line arguments
