@@ -17,12 +17,45 @@ public class KasirView extends javax.swing.JFrame {
     public KasirView() {
     initComponents();
     
-    cmbMenu.removeAllItems();
+    setLocationRelativeTo(null);
+    
+    tampilMenu();
+}
+    
+    private void tampilMenu(){
 
-    cmbMenu.addItem("Nasi Goreng");
-    cmbMenu.addItem("Mie Ayam");
-    cmbMenu.addItem("Es Teh");
-    cmbMenu.addItem("Ayam Geprek");
+    try{
+
+        cmbMenu.removeAllItems();
+
+        java.sql.Connection conn =
+        kantinkampusapp.database.Koneksi.getKoneksi();
+
+        String sql = "SELECT nama_menu FROM menu";
+
+        java.sql.Statement st =
+        conn.createStatement();
+
+        java.sql.ResultSet rs =
+        st.executeQuery(sql);
+
+        while(rs.next()){
+
+            cmbMenu.addItem(
+                rs.getString("nama_menu")
+            );
+
+        }
+
+    } catch(Exception e){
+
+        JOptionPane.showMessageDialog(
+            null,
+            e.getMessage()
+        );
+
+    }
+
 }
 
     /**
@@ -47,19 +80,27 @@ public class KasirView extends javax.swing.JFrame {
         btnTambah = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKasir = new javax.swing.JTable();
+        lblStok = new javax.swing.JLabel();
+        txtStok = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 600));
+        setBackground(new java.awt.Color(245, 247, 250));
+        setPreferredSize(new java.awt.Dimension(900, 600));
 
-        lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lblJudul.setForeground(new java.awt.Color(30, 58, 95));
         lblJudul.setText("SISTEM KASIR KANTIN");
 
+        lblJumlah.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblJumlah.setText("Jumlah");
 
+        lblMenu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMenu.setText("Nama Menu");
 
+        lblTotal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblTotal.setText("Total Bayar : Rp 0");
 
+        lblHarga.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblHarga.setText("Harga");
 
         cmbMenu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -69,6 +110,15 @@ public class KasirView extends javax.swing.JFrame {
             }
         });
 
+        txtHarga.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtHarga.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        txtJumlah.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtJumlah.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        txtJumlah.setPreferredSize(new java.awt.Dimension(200, 35));
+
+        btnSimpan.setBackground(new java.awt.Color(29, 150, 0));
+        btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnSimpan.setText("SIMPAN");
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -76,6 +126,9 @@ public class KasirView extends javax.swing.JFrame {
             }
         });
 
+        btnHapus.setBackground(new java.awt.Color(220, 38, 38));
+        btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnHapus.setForeground(java.awt.Color.white);
         btnHapus.setText("HAPUS");
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,6 +136,8 @@ public class KasirView extends javax.swing.JFrame {
             }
         });
 
+        btnTambah.setBackground(new java.awt.Color(37, 99, 235));
+        btnTambah.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnTambah.setText("TAMBAH");
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,6 +145,7 @@ public class KasirView extends javax.swing.JFrame {
             }
         });
 
+        tblKasir.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         tblKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -98,7 +154,13 @@ public class KasirView extends javax.swing.JFrame {
                 "Menu", "Harga", "Jumlah", "Subtotal"
             }
         ));
+        tblKasir.setPreferredSize(new java.awt.Dimension(200, 35));
+        tblKasir.setRowHeight(25);
         jScrollPane1.setViewportView(tblKasir);
+
+        lblStok.setText("Stok : ");
+
+        txtStok.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,13 +176,17 @@ public class KasirView extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblMenu)
-                            .addComponent(lblHarga))
+                            .addComponent(lblHarga)
+                            .addComponent(lblJumlah))
                         .addGap(86, 86, 86)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmbMenu, 0, 126, Short.MAX_VALUE)
-                            .addComponent(txtHarga)))
-                    .addComponent(lblJumlah)
+                            .addComponent(txtHarga))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblStok)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnTambah)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTotal)
@@ -130,6 +196,9 @@ public class KasirView extends javax.swing.JFrame {
                         .addComponent(btnHapus)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cmbMenu, txtHarga, txtJumlah});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -141,16 +210,19 @@ public class KasirView extends javax.swing.JFrame {
                     .addComponent(cmbMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblHarga))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblHarga)
-                        .addGap(18, 18, 18)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblJumlah)
-                            .addComponent(txtJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtJumlah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblStok)
+                            .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(btnTambah)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblTotal)
@@ -161,43 +233,120 @@ public class KasirView extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtHarga, txtJumlah});
+
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblHarga, lblJumlah, lblMenu});
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMenuActionPerformed
         // TODO add your handling code here:
-if (cmbMenu.getSelectedItem() == null) {
+        if (cmbMenu.getSelectedItem() == null) {
         return;
-    }
+        }
 
-    String menu = cmbMenu.getSelectedItem().toString();
+        String menu =
+        cmbMenu.getSelectedItem().toString();
 
-    switch(menu) {
+        try {
 
-        case "Nasi Goreng":
-            txtHarga.setText("15000");
-            break;
+            java.sql.Connection conn =
+            kantinkampusapp.database.Koneksi.getKoneksi();
 
-        case "Mie Ayam":
-            txtHarga.setText("12000");
-            break;
+            String sql =
+            "SELECT harga, stok FROM menu WHERE nama_menu=?";
 
-        case "Es Teh":
-            txtHarga.setText("5000");
-            break;
+            java.sql.PreparedStatement pst =
+            conn.prepareStatement(sql);
 
-        case "Ayam Geprek":
-            txtHarga.setText("18000");
-            break;
+            pst.setString(1, menu);
+
+            java.sql.ResultSet rs =
+            pst.executeQuery();
+
+            if(rs.next()){
+
+                txtHarga.setText(
+                    rs.getString("harga")
+                );
+
+                txtStok.setText(
+                    rs.getString("stok")
+                );
+
+        }
+
+    } catch(Exception e){
+
+        JOptionPane.showMessageDialog(
+            null,
+            e.getMessage()
+        );
     }
     }//GEN-LAST:event_cmbMenuActionPerformed
 
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
         String menu = cmbMenu.getSelectedItem().toString();
+if(txtJumlah.getText().isEmpty()){
+    JOptionPane.showMessageDialog(
+        null,
+        "Jumlah tidak boleh kosong"
+    );
+    return;
+}
 
-int harga = Integer.parseInt(txtHarga.getText());
-int jumlah = Integer.parseInt(txtJumlah.getText());
+int harga;
+int jumlah;
+
+try{
+
+    harga = Integer.parseInt(txtHarga.getText());
+    jumlah = Integer.parseInt(txtJumlah.getText());
+
+} catch(Exception e){
+
+    JOptionPane.showMessageDialog(
+        null,
+        "Jumlah harus angka"
+    );
+
+    return;
+}
+
+if(jumlah <= 0){
+
+    JOptionPane.showMessageDialog(
+        null,
+        "Jumlah harus lebih dari 0"
+    );
+
+    return;
+}
+
+int stok = 0;
+
+try {
+    java.sql.Connection conn =
+    kantinkampusapp.database.Koneksi.getKoneksi();
+
+    String sql = "SELECT stok FROM menu WHERE nama_menu=?";
+
+    java.sql.PreparedStatement pst =
+    conn.prepareStatement(sql);
+
+    pst.setString(1, menu);
+
+    java.sql.ResultSet rs = pst.executeQuery();
+
+    if(rs.next()) {
+        stok = rs.getInt("stok");
+    }
+
+} catch(Exception e) {
+    JOptionPane.showMessageDialog(null, e.getMessage());
+}
 
 int subtotal = harga * jumlah;
 
@@ -222,6 +371,8 @@ for (int i = 0; i < tblKasir.getRowCount(); i++) {
 }
 
 lblTotal.setText("Total Bayar : Rp " + total);
+
+txtJumlah.setText("");
     }//GEN-LAST:event_btnTambahActionPerformed
 
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
@@ -252,6 +403,14 @@ if (baris >= 0) {
     private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
         // TODO add your handling code here:
         try {
+            
+            if(tblKasir.getRowCount() == 0){
+    JOptionPane.showMessageDialog(
+        null,
+        "Belum ada pesanan"
+    );
+    return;
+}
 
     java.sql.Connection conn =
         kantinkampusapp.database.Koneksi.getKoneksi();
@@ -287,6 +446,8 @@ if (baris >= 0) {
     pstTransaksi.setInt(1, total);
 
     pstTransaksi.executeUpdate();
+    
+    
 
     // =========================
     // AMBIL ID TRANSAKSI
@@ -340,7 +501,7 @@ String sqlStok =
 java.sql.PreparedStatement pstStok =
     conn.prepareStatement(sqlStok);
 
-pstStok.setString(1, jumlah);
+pstStok.setInt(1, Integer.parseInt(jumlah));
 pstStok.setString(2, menu);
 
 pstStok.executeUpdate();
@@ -411,9 +572,11 @@ txtJumlah.setText("");
     private javax.swing.JLabel lblJudul;
     private javax.swing.JLabel lblJumlah;
     private javax.swing.JLabel lblMenu;
+    private javax.swing.JLabel lblStok;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblKasir;
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtJumlah;
+    private javax.swing.JTextField txtStok;
     // End of variables declaration//GEN-END:variables
 }

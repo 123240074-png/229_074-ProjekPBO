@@ -59,16 +59,16 @@ public class LoginView extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(jLabel3))
                 .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                    .addComponent(txtPassword))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(91, 91, 91)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnLogin)
                     .addComponent(jLabel1))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 196, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,19 +92,65 @@ public class LoginView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String username = txtUsername.getText();
-String password = txtPassword.getText();
+        try {
 
-if(username.equals("admin") && password.equals("123")) {
+        java.sql.Connection conn =
+        kantinkampusapp.database.Koneksi.getKoneksi();
 
-    JOptionPane.showMessageDialog(this,
-            "Login Berhasil");
+        String sql =
+        "SELECT * FROM user WHERE username=? AND password=?";
 
-} else {
+        java.sql.PreparedStatement pst =
+        conn.prepareStatement(sql);
 
-    JOptionPane.showMessageDialog(this,
-            "Username atau Password Salah");
-}
+        pst.setString(1, txtUsername.getText());
+
+        pst.setString(2,
+        txtPassword.getText());
+
+        java.sql.ResultSet rs =
+        pst.executeQuery();
+
+        if(rs.next()){
+
+            String role =
+            rs.getString("role");
+
+            JOptionPane.showMessageDialog(
+                null,
+                "Login berhasil sebagai " + role
+            );
+
+            if(role.equals("admin")){
+
+                new MenuView().setVisible(true);
+
+            } else {
+
+                new KasirView().setVisible(true);
+
+            }
+
+            dispose();
+
+        } else {
+
+            JOptionPane.showMessageDialog(
+                null,
+                "Username atau password salah"
+            );
+
+        }
+
+    } catch(Exception e){
+
+        JOptionPane.showMessageDialog(
+            null,
+            e.getMessage()
+        );
+
+    }
+
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**
