@@ -84,8 +84,9 @@ public class KasirView extends javax.swing.JFrame {
         txtStok = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(245, 247, 250));
-        setPreferredSize(new java.awt.Dimension(900, 600));
+        setBackground(new java.awt.Color(245, 245, 245));
+        setPreferredSize(new java.awt.Dimension(600, 600));
+        setResizable(false);
 
         lblJudul.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         lblJudul.setForeground(new java.awt.Color(30, 58, 95));
@@ -97,7 +98,8 @@ public class KasirView extends javax.swing.JFrame {
         lblMenu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMenu.setText("Nama Menu");
 
-        lblTotal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblTotal.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lblTotal.setForeground(java.awt.Color.darkGray);
         lblTotal.setText("Total Bayar : Rp 0");
 
         lblHarga.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -117,19 +119,22 @@ public class KasirView extends javax.swing.JFrame {
         txtJumlah.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         txtJumlah.setPreferredSize(new java.awt.Dimension(200, 35));
 
-        btnSimpan.setBackground(new java.awt.Color(29, 150, 0));
+        btnSimpan.setBackground(new java.awt.Color(92, 184, 92));
         btnSimpan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSimpan.setForeground(java.awt.Color.white);
         btnSimpan.setText("SIMPAN");
+        btnSimpan.setPreferredSize(new java.awt.Dimension(120, 35));
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimpanActionPerformed(evt);
             }
         });
 
-        btnHapus.setBackground(new java.awt.Color(220, 38, 38));
+        btnHapus.setBackground(new java.awt.Color(217, 83, 79));
         btnHapus.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnHapus.setForeground(java.awt.Color.white);
         btnHapus.setText("HAPUS");
+        btnHapus.setPreferredSize(new java.awt.Dimension(120, 35));
         btnHapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHapusActionPerformed(evt);
@@ -138,14 +143,16 @@ public class KasirView extends javax.swing.JFrame {
 
         btnTambah.setBackground(new java.awt.Color(37, 99, 235));
         btnTambah.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnTambah.setForeground(java.awt.Color.white);
         btnTambah.setText("TAMBAH");
+        btnTambah.setPreferredSize(new java.awt.Dimension(120, 35));
         btnTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnTambahActionPerformed(evt);
             }
         });
 
-        tblKasir.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        tblKasir.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
         tblKasir.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -155,7 +162,7 @@ public class KasirView extends javax.swing.JFrame {
             }
         ));
         tblKasir.setPreferredSize(new java.awt.Dimension(200, 35));
-        tblKasir.setRowHeight(25);
+        tblKasir.setRowHeight(28);
         jScrollPane1.setViewportView(tblKasir);
 
         lblStok.setText("Stok : ");
@@ -187,13 +194,13 @@ public class KasirView extends javax.swing.JFrame {
                         .addComponent(lblStok)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnTambah)
+                    .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTotal)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSimpan)
+                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnHapus)))
+                        .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -221,15 +228,15 @@ public class KasirView extends javax.swing.JFrame {
                             .addComponent(lblStok)
                             .addComponent(txtStok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addComponent(btnTambah)
+                .addComponent(btnTambah, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblTotal)
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSimpan)
-                    .addComponent(btnHapus))
+                    .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHapus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

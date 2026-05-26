@@ -17,6 +17,7 @@ public class MenuView extends javax.swing.JFrame {
      */
     public MenuView() {
     initComponents();
+    setLocationRelativeTo(null);
 
     tampilDataMenu();
 }
@@ -89,6 +90,8 @@ public class MenuView extends javax.swing.JFrame {
         btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(234, 234, 234));
+        setResizable(false);
 
         txtNamaMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
